@@ -1,0 +1,9 @@
+---
+- name: Run script instal and configure kops
+  script: ~/bigproject/bash-script/kops.sh
+
+- name: Run configure kops
+  script: ~/bigproject/bash-script/kops-configure.sh
+
+- name: Run script kops create cluster
+ script: ~/bigproject/bash-script/kops-create-cluster.sh

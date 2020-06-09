@@ -1,0 +1,4 @@
+---
+- name: Run script instal kubectl
+  script: ~/bigproject/bash-script/kubectl.sh
+  

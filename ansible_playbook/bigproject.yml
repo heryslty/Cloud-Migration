@@ -1,0 +1,9 @@
+---
+- name: Instalation
+  hosts: aws
+  roles:
+     - ssh-key
+     - kubectl
+     - kops
+     
+      

@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: s-fb-deployment
+  namespace: staging
+  labels:
+    app: s-fb
+    env: staging
+spec:
+  selector:
+    matchLabels:
+      app: s-fb
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: s-fb
+    spec:
+      volumes:
+        - configMap:
+            name: s-fb-configmap
+          name: config-fb
+      containers:
+        - name: s-fb-pod
+          image: $DOCKER_REGISTRY/$DOCKER_IMAGE_NAME:${BUILD_NUMBER}
+          ports:
+            - containerPort: 80
+          volumeMounts:
+            - name: config-fb
+              mountPath:  "/var/www/sosial-media/config.php"
+              subPath: "config.php"
+          env:  
+            - name: DB_HOST    
+              value: "database-1.chghgvrwjatk.ap-southeast-1.rds.amazonaws.com"
+            - name: DB_USER    
+              valueFrom:       
+                secretKeyRef:
+                  name: s-fb-secret
+                  key: DB_USER  
+            - name: DB_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: s-fb-secret
+                  key: DB_PASS

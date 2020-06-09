@@ -1,0 +1,87 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: s-wp-deployment
+  namespace: staging
+  labels:
+    app: s-wp
+    env: staging
+spec:
+  selector:apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: s-wp-deployment
+  namespace: staging
+  labels:
+    app: s-wp
+    env: staging
+spec:
+  selector:
+    matchLabels:
+      app: s-wp
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: s-wp
+    spec:
+      volumes:
+        - configMap:
+            name: s-wp-configmap
+          name: config-wp
+      containers:
+        - name: s-wp-pod
+          image: $DOCKER_REGISTRY/$DOCKER_IMAGE_NAME:${BUILD_NUMBER}
+          ports:
+            - containerPort: 80
+          volumeMounts:
+            - name: config-wp
+              mountPath:  "/var/www/html/wp-config.php"
+              subPath: "wp-config.php"
+          env:  
+            - name: DB_HOST    
+              value: "database-1.chghgvrwjatk.ap-southeast-1.rds.amazonaws.com"
+            - name: DB_USER    
+              valueFrom:       
+                secretKeyRef:
+                  name: s-wp-secret
+                  key: DB_USER  
+            - name: DB_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: s-wp-secret
+                  key: DB_PASS
+    matchLabels:
+      app: s-wp
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: s-wp
+    spec:
+      volumes:
+        - configMap:
+            name: s-wp-configmap
+          name: config-wp
+      containers:
+        - name: s-wp-pod
+          image: $DOCKER_REGISTRY/$DOCKER_IMAGE_NAME:${BUILD_NUMBER}
+          ports:
+            - containerPort: 80
+          volumeMounts:
+            - name: config-wp
+              mountPath:  "/var/www/html/wp-config.php"
+              subPath: "wp-config.php"
+          env:  
+            - name: DB_HOST    
+              value: "database-1.chghgvrwjatk.ap-southeast-1.rds.amazonaws.com"
+            - name: DB_USER    
+              valueFrom:       
+                secretKeyRef:
+                  name: s-wp-secret
+                  key: DB_USER  
+            - name: DB_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: s-wp-secret
+                  key: DB_PASS

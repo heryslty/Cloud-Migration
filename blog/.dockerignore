@@ -1,0 +1,7 @@
+Dockerfile
+p-dep-wordpress.yml
+p-jenkinsfile-wordpress
+p-svc-sc-config-wordpress.yml
+s-dep-wordpress.yml
+s-jenkinsfile-wordpress
+s-svc-sc-config-wordpress.yml

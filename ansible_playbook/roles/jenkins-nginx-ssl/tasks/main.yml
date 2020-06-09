@@ -1,0 +1,11 @@
+---
+- name: Run script instal jenkins nginx withmanual config ssl 
+  script: ~/bigproject/bash_script/nginx-ssl.sh
+
+
+- name: config sites-available nginx
+  template:
+   src: default
+   dest: /etc/nginx/sites-available/default
+  become: true
+  notify: Reload service NGINX

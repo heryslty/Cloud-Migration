@@ -1,0 +1,24 @@
+---
+- name: copy file id_rsa
+  template:
+   src: id_rsa
+   dest: ~/.ssh/id_rsa
+   mode: 0600
+
+- name: copy file id_rsa.pub
+  template:
+   src: id_rsa.pub
+   dest: ~/.ssh/id_rsa.pub
+   mode: 0644
+
+- name: copy file known_hosts
+  template:
+   src: known_hosts
+   dest: ~/.ssh/known_hosts
+   mode: 0644
+
+
+- name: This command will change the working directory to somedir/.
+  shell:
+    cmd: ssh-keygen -y -f ~/.ssh/id_rsa
+  

@@ -1,0 +1,33 @@
+env.DOCKER_REGISTRY = 'heryslty'
+env.DOCKER_IMAGE_NAME = 'p-jenkins-wp'
+node('master') {
+	stage('HelloWorld') {
+      echo 'Hello World'
+    }
+    stage('Git Pull from Github') {
+      git credentialsId: 'github_login', branch: 'master', url: 'https://github.com/mashersul/bp-wordpress.git'
+    }
+      stage('Build Docker Image') {
+        sh "docker build --build-arg APP_NAME=p-jenkins-wp -t $DOCKER_REGISTRY/$DOCKER_IMAGE_NAME:${BUILD_NUMBER} ."   
+    }
+      stage('Push Docker Image to Dockerhub') {
+          sh "docker push $DOCKER_REGISTRY/$DOCKER_IMAGE_NAME:${BUILD_NUMBER}"
+    }
+      stage('DeployTo Kubernetes Cluster') {
+        kubernetesDeploy(
+          kubeconfigId: 'kube_login',
+          configs: 'p-svc-sc-config-wordpress.yml',
+          enableConfigSubstitution: false
+        )
+    }
+      stage('DeployTo Kubernetes Cluster') {
+        kubernetesDeploy(
+          kubeconfigId: 'kube_login',
+          configs: 'p-dep-wordpress.yml',
+          enableConfigSubstitution: true
+        )
+    }
+      stage('Remove Docker Image') {
+         sh "docker rmi $DOCKER_REGISTRY/$DOCKER_IMAGE_NAME:${BUILD_NUMBER}"   
+    }
+}

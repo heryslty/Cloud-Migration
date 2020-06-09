@@ -1,0 +1,36 @@
+#contoh rules
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: p-ingress
+  namespace: production
+  annotations:
+    ## Untuk menaikan batas upload file
+    nginx.org/client-max-body-size: "10m"
+    ## Memaksa jalan di https
+   # nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+spec:
+  rules:
+
+## Service Location n Characters
+  - host: pesbuk.heryslty.xyz
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: p-fb-service
+          servicePort: 80
+  - host: sulistiyo.heryslty.xyz
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: p-lp-service
+          servicePort: 80
+  - host: blog.heryslty.xyz
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: p-wp-service
+          servicePort: 80
